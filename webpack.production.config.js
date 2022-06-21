@@ -4,13 +4,22 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin"); //plugin for cle
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: {
+    "hello-world": "./src/hello-world.js",
+    kebon: "./src/kebon.js",
+  },
   output: {
-    filename: "bundle.[contenthash].js", // for dynamic name file every changes / update occur in the file so browser will download the new one useful for case caching
+    filename: "[name].[contenthash].js", // for dynamic name file every changes / update occur in the file so browser will download the new one useful for case caching
     path: path.resolve(__dirname, "./dist"),
     publicPath: "",
   },
   mode: "production",
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+      minSize: 3000,
+    },
+  },
   module: {
     rules: [
       {
@@ -55,7 +64,7 @@ module.exports = {
   },
   plugins: [
     // new TerserPlugin(), removed because in production auto included without add here
-    new MiniCssExtractPlugin({ filename: "styles.[contenthash].css" }),
+    new MiniCssExtractPlugin({ filename: "[name].[contenthash].css" }),
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: [
         "**/*", //default value if u not modified it
@@ -63,10 +72,20 @@ module.exports = {
       ],
     }), //can clean multiple folder
     new HtmlWebpackPlugin({
-      title: "Hello hahaha",
-      filename: "index.html", //kalo mau ubah name filenya bisa disini kalo beda folder tinggal di kasih "/"
-      description: "Some description",
-      template: "src/index.hbs",
+      filename: "hello-world.html",
+      chunks: ["hello-world"],
+      title: "Hello world",
+      description: "some description",
+      template: "src/page-template.hbs",
+      minify: false,
+    }),
+    new HtmlWebpackPlugin({
+      filename: "kebon.html",
+      chunks: ["kebon"],
+      title: "kEBON Title",
+      description: "kebon",
+      template: "src/page-template.hbs",
+      minify: false,
     }),
   ],
 };
