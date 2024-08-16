@@ -3,9 +3,12 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin"); //plugin for cle
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: {
+    "hello-world": "./src/hello-world.js",
+    kebon: "./src/kebon.js",
+  },
   output: {
-    filename: "bundle.js", // for dynamic name file every changes / update occur in the file so browser will download the new one useful for case caching
+    filename: "[name].bundle.js", // for dynamic name file every changes / update occur in the file so browser will download the new one useful for case caching
     path: path.resolve(__dirname, "./dist"),
     publicPath: "",
   },
@@ -70,10 +73,20 @@ module.exports = {
       ],
     }), //can clean multiple folder
     new HtmlWebpackPlugin({
-      title: "Hello hahaha",
-      filename: "index.html", //kalo mau ubah name filenya bisa disini kalo beda folder tinggal di kasih "/"
-      description: "Some description",
-      template: "src/index.hbs",
+      filename: "hello-world.html",
+      chunks: ["hello-world"],
+      title: "Hello world",
+      description: "some description",
+      template: "src/page-template.hbs",
+      minify: false,
+    }),
+    new HtmlWebpackPlugin({
+      filename: "kebon.html",
+      chunks: ["kebon"],
+      title: "kEBON Title",
+      description: "kebon",
+      template: "src/page-template.hbs",
+      minify: false,
     }),
   ],
 };
